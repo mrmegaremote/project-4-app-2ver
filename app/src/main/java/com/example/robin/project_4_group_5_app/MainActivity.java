@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -24,8 +25,6 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
-import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -34,29 +33,18 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-
 public class MainActivity extends AppCompatActivity {
 
-//    private int userstoryQueryNumber;
-
-    public static final String MY_JSON ="MY_JSON";
+    private query1 testQuery1 = new query1();
+    private TextView textViewDebug;
+    private String jsonString;
 
     private static final String JSON_URL = "http://188.166.26.149/userstory1.php?querynum=";
-
-    JSONArray userstory2 = null;
-
-    ArrayList<HashMap<String, String>> theftList;
-
-    ListView listView;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        theftList = new ArrayList<HashMap<String, String>>();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -100,22 +88,32 @@ public class MainActivity extends AppCompatActivity {
 
     public void secondHomeButtonClick(View view)
     {
-        initializeGraphs("1");
+        setContentView(R.layout.tabbedgraph);
         initializeTabs();
+        initializeGraphs();
+
+        textViewDebug = (TextView) findViewById(R.id.textViewDebug);
+
+        initializeJSON("1");
     }
 
     private void initializeJSON(String userstoryQueryNumber) {
-        getJSON(JSON_URL ,userstoryQueryNumber);
+        this.jsonString = getJSON(JSON_URL, userstoryQueryNumber);
+//        textViewDebug.setText(testQuery1.result.toString());
+//        textViewDebug.setText("Nope.");
     }
 
-    private void getJSON(String url, String userstoryQueryNumber) {
-        class GetJSON extends AsyncTask<String, Void, String>{
+    private String getJSON(final String url, String userstoryQueryNumber) {
+        class GetJSON extends AsyncTask<String, Void, String>
+        {
             ProgressDialog loading;
+            String jsonString = "Test!";
 
             @Override
             protected void onPreExecute(){
                 super.onPreExecute();
                 loading = ProgressDialog.show(MainActivity.this, "Wan moment...", null, true, true);
+
             }
 
             @Override
@@ -143,33 +141,38 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                     return e.toString();
                 }
+
             }
 
             @Override
             protected void onPostExecute(String s){
                 super.onPostExecute(s);
                 loading.dismiss();
-                Toast.makeText(MainActivity.this, s, Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(MainActivity.this, ParseJSON.class);
-                intent.putExtra(MY_JSON,s);
-                startActivity(intent);
             }
         }
+
         GetJSON gj = new GetJSON();
         String newurl = url.concat(userstoryQueryNumber);
         gj.execute(newurl);
+        try {
+            gj.jsonString = (gj.get());
+            textViewDebug.setText(gj.jsonString);
+            testQuery1 = JsonUtil.JsonToQuery1(gj.jsonString);
+        }
+        catch (Exception e)
+        {
+            System.exit(1337);
+        }
+        return gj.jsonString;
     }
 
-    private void initializeGraphs(String userstoryQueryNumber)
+    private void initializeGraphs()
     {
-        initializeJSON(userstoryQueryNumber);
-
-
-        LineChart graphStolenBikes = (LineChart) findViewById(R.id.graphStolenBikes);
+//        LineChart graphStolenBikes = (LineChart) findViewById(R.id.graphStolenBikes);
         BarChart graphContainers = (BarChart) findViewById(R.id.graphContainers);
         BarChart graphCombi = (BarChart) findViewById(R.id.graphCombi);
 
-        graphStolenBikes.setTouchEnabled(true);
+//        graphStolenBikes.setTouchEnabled(true);
         graphContainers.setTouchEnabled(true);
         graphCombi.setTouchEnabled(true);
 
@@ -216,11 +219,11 @@ public class MainActivity extends AppCompatActivity {
 
         //XXX.setData(LineData)     Geeft de LineData aan de graph.
 
-        graphStolenBikes.setData(dataStolenBikes);
+//        graphStolenBikes.setData(dataStolenBikes);
 
         //XXX.invalidate()          Updatet de graph om alle wijzingen van gegevens (van hiervoor) door te voeren.
 
-        graphStolenBikes.invalidate();
+//        graphStolenBikes.invalidate();
 
     }
 
