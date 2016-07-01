@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,12 +33,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private query1 testQuery1 = new query1();
     private TextView textViewDebug;
     private String jsonString;
+
 
     private static final String JSON_URL = "http://188.166.26.149/userstory1.php?querynum=";
 
@@ -89,18 +91,27 @@ public class MainActivity extends AppCompatActivity {
     public void secondHomeButtonClick(View view)
     {
         setContentView(R.layout.tabbedgraph);
+
+        BarChart graphContainers = (BarChart) findViewById(R.id.graphContainers);
+        LineChart graphStolenBikes = (LineChart) findViewById(R.id.graphStolenBikes);
+        BarChart graphCombi = (BarChart) findViewById(R.id.graphCombi);
+
         initializeTabs();
-        initializeGraphs();
+        ArrayList<ArrayList<ArrayList<Pair<String,String>>>> listQueries = new ArrayList<>();
+        for (int i = 0; i < 3; i++){
+            listQueries.add(initializeJSON(Integer.toString(i+1)));
+        }
 
-        textViewDebug = (TextView) findViewById(R.id.textViewDebug);
+        initialize.Graphs(graphContainers, graphStolenBikes, graphCombi, listQueries);
 
-        initializeJSON("1");
+//        textViewDebug = (TextView) findViewById(R.id.textViewDebug);
+
+
     }
 
-    private void initializeJSON(String userstoryQueryNumber) {
+    private ArrayList<ArrayList<Pair<String,String>>> initializeJSON(String userstoryQueryNumber) {
         this.jsonString = getJSON(JSON_URL, userstoryQueryNumber);
-//        textViewDebug.setText(testQuery1.result.toString());
-//        textViewDebug.setText("Nope.");
+        return JsonUtil.extractJSON(this.jsonString);
     }
 
     private String getJSON(final String url, String userstoryQueryNumber) {
@@ -156,75 +167,14 @@ public class MainActivity extends AppCompatActivity {
         gj.execute(newurl);
         try {
             gj.jsonString = (gj.get());
-            textViewDebug.setText(gj.jsonString);
-            testQuery1 = JsonUtil.JsonToQuery1(gj.jsonString);
+//            textViewDebug.setText(gj.jsonString);
+
         }
         catch (Exception e)
         {
             System.exit(1337);
         }
         return gj.jsonString;
-    }
-
-    private void initializeGraphs()
-    {
-//        LineChart graphStolenBikes = (LineChart) findViewById(R.id.graphStolenBikes);
-        BarChart graphContainers = (BarChart) findViewById(R.id.graphContainers);
-        BarChart graphCombi = (BarChart) findViewById(R.id.graphCombi);
-
-//        graphStolenBikes.setTouchEnabled(true);
-        graphContainers.setTouchEnabled(true);
-        graphCombi.setTouchEnabled(true);
-
-        //ArrayList<Entry>          Lijst met Entries/punten die later gekoppeld worden tot een line.
-
-        ArrayList<Entry> dataStolenBikes1 = new ArrayList<Entry>();
-        ArrayList<Entry> dataStolenBikes2 = new ArrayList<Entry>();
-
-        //Entry                     1 punt binnen een ArrayList<Entry> / line.
-        //Entry(int WaardeOpY-axis, int WaarOpX-axis)
-
-        Entry entryStolenBikes1 = new Entry(12, 0);
-        dataStolenBikes1.add(entryStolenBikes1);
-        Entry entryStolenBikes2 = new Entry(14, 1);
-        dataStolenBikes1.add(entryStolenBikes2);
-
-        Entry entryStolenBikes3 = new Entry(15, 0);
-        dataStolenBikes2.add(entryStolenBikes3);
-        Entry entryStolenBikes4 = new Entry(10, 1);
-        dataStolenBikes2.add(entryStolenBikes4);
-
-        //LineDataSet               Verbindt de alle punten binnen de ArrayList<Entry> aan elkaar
-        //                          en geeft de line een naam en kleur in de legenda.
-
-        LineDataSet lineDataSetStolenBikes1 = new LineDataSet(dataStolenBikes1, "Company 1");
-        lineDataSetStolenBikes1.setAxisDependency(YAxis.AxisDependency.LEFT);
-        LineDataSet lineDataSetStolenBikes2 = new LineDataSet(dataStolenBikes2, "Company 2");
-        lineDataSetStolenBikes1.setAxisDependency(YAxis.AxisDependency.LEFT);
-
-        //ArrayList<ILineDataSet>   Verzamelt alle lines bij elkaar als 1 line dataset.
-
-        ArrayList<ILineDataSet> dataSetsStolenBikes = new ArrayList<ILineDataSet>();
-        dataSetsStolenBikes.add(lineDataSetStolenBikes1);
-        dataSetsStolenBikes.add(lineDataSetStolenBikes2);
-
-        //ArrayList<String> xVals   ArrayList met de naam van elke lijn van de X-axis op de grid/graph.
-
-        ArrayList<String> xValsStolenBikes = new ArrayList<String>();
-        xValsStolenBikes.add("1.Q"); xValsStolenBikes.add("2.Q"); xValsStolenBikes.add("3.Q"); xValsStolenBikes.add("4.Q");
-
-        //LineData                  Combinatie van LineDataSet en de X-axis specificaties/eigenschappen.
-
-        LineData dataStolenBikes = new LineData(xValsStolenBikes, dataSetsStolenBikes);
-
-        //XXX.setData(LineData)     Geeft de LineData aan de graph.
-
-//        graphStolenBikes.setData(dataStolenBikes);
-
-        //XXX.invalidate()          Updatet de graph om alle wijzingen van gegevens (van hiervoor) door te voeren.
-
-//        graphStolenBikes.invalidate();
-
     }
 
     public void returnButtonTabbed(View view)

@@ -1,61 +1,43 @@
 package com.example.robin.project_4_group_5_app;
 
+import android.util.Pair;
 import android.view.View;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 public class JsonUtil {
 
-    public static query1 JsonToQuery1(String json) {
+    public static ArrayList<ArrayList<Pair<String,String>>> extractJSON(String jsonString)
+    {
         try {
-            JSONArray arr = new JSONArray(json);
+            JSONArray jsonList = new JSONObject(jsonString).getJSONArray("result");
 
-            query1 q = new query1();
 
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject o = arr.getJSONObject(i);
+            ArrayList<ArrayList<Pair<String, String>>> data = new ArrayList<ArrayList<Pair<String, String>>>();
 
-                System.out.println(o.toString());
+            for(int i = 0; i < jsonList.length(); i++) {
+                ArrayList<Pair<String, String>> subData = new ArrayList<Pair<String, String>>();
 
-                q.result.add(new Result(o.getString("amount"), o.getString("borough")));
+                JSONObject jObject = jsonList.getJSONObject(i);
+                Iterator<?> keys = jObject.keys();
+                while( keys.hasNext() ) {
+                    String key = (String)keys.next();
+                    subData.add(new Pair(key, (String)jObject.get(key)));
+                }
+                data.add(subData);
             }
-
-            return q;
-
+            return data;
         }
-        catch(Exception e) {
-            return new query1();
+        catch (JSONException e) {
+            e.printStackTrace();
+            return null;
         }
     }
-
 }
-
-//      BACKUP      //
-
-//public class JsonUtil {
-//
-//    public static query1 JsonToQuery1(String json) {
-//        try {
-//            JSONArray arr = new JSONArray(json);
-//
-//            query1 q = new query1();
-//
-//            for (int i = 0; i < arr.length(); i++) {
-//                JSONObject o = arr.getJSONObject(i);
-//
-//                System.out.println(o.toString());
-//
-//                q.result.add(new Result(o.getString("amount"), o.getString("borough")));
-//            }
-//
-//            return q;
-//
-//        }
-//        catch(Exception e) {
-//            return new query1();
-//        }
-//    }
-//
-//}
