@@ -1,9 +1,11 @@
 package com.example.robin.project_4_group_5_app;
 
 import android.util.Pair;
+import android.widget.Spinner;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -11,6 +13,8 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
@@ -22,25 +26,26 @@ import java.util.List;
  */
 public class initialize {
 
-    public static void Graphs(BarChart graphContainers, LineChart graphStolenBikes, BarChart graphCombi, ArrayList<ArrayList<ArrayList<Pair<String,String>>>> listQueries){
+    public static void Graphs(ArrayList<ArrayList<ArrayList<Pair<String,String>>>> listQueries, BarChart graphContainers, LineChart graphStolenBikes, BarChart graphCombi, PieChart graphBrands, PieChart graphColors){
 
-        ArrayList<ArrayList<Pair<String,String>>> list0 = listQueries.get(0);
-        ArrayList<ArrayList<Pair<String,String>>> list1 = listQueries.get(1);
-        ArrayList<ArrayList<Pair<String,String>>> list2 = listQueries.get(2);
+        ArrayList<ArrayList<Pair<String,String>>> listContainers = listQueries.get(0);
+        ArrayList<ArrayList<Pair<String,String>>> listStolenBikes = listQueries.get(1);
+        ArrayList<ArrayList<Pair<String,String>>> listCombi = listQueries.get(2);
+        ArrayList<ArrayList<Pair<String,String>>> listBrands = listQueries.get(3);
+        ArrayList<ArrayList<Pair<String,String>>> listColors = listQueries.get(4);
 
-        graphContainers.setTouchEnabled(true);
-        graphCombi.setTouchEnabled(true);
 
         //      BAR-GRAPH       //
-        ArrayList<String> labelsContainer = new ArrayList<>();
+        graphContainers.setTouchEnabled(true);
 
-        for (ArrayList<Pair<String, String>> row:list0) {
+        ArrayList<String> labelsContainer = new ArrayList<>();
+        for (ArrayList<Pair<String, String>> row:listContainers) {
             labelsContainer.add(row.get(1).second);
         }
 
         List<BarEntry> barEntryContainer = new ArrayList<>();
-        for (int i = 0; i < list0.size(); i++){
-                barEntryContainer.add(new BarEntry(Float.parseFloat(list0.get(i).get(0).second), i));
+        for (int i = 0; i < listContainers.size(); i++){
+                barEntryContainer.add(new BarEntry(Float.parseFloat(listContainers.get(i).get(0).second), i));
         }
 
         BarDataSet datasetContainer = new BarDataSet(barEntryContainer, "Aantal fietstrommels.");
@@ -61,9 +66,9 @@ public class initialize {
 
         ArrayList<String> xValsStolenBikes = new ArrayList<String>();
         ArrayList<Entry> entryStolenBikes = new ArrayList<Entry>();
-        for (int i = 0; i < list1.size(); i++){
-            entryStolenBikes.add(new Entry(Float.parseFloat(list1.get(i).get(0).second), i));
-            xValsStolenBikes.add(list1.get(i).get(1).second +  " " + list1.get(i).get(2).second);
+        for (int i = 0; i < listStolenBikes.size(); i++){
+            entryStolenBikes.add(new Entry(Float.parseFloat(listStolenBikes.get(i).get(0).second), i));
+            xValsStolenBikes.add(listStolenBikes.get(i).get(1).second +  " " + listStolenBikes.get(i).get(2).second);
         }
         xValsStolenBikes.add("");
 
@@ -73,10 +78,46 @@ public class initialize {
         ArrayList<ILineDataSet> dataSetsStolenBikes = new ArrayList<ILineDataSet>();
         dataSetsStolenBikes.add(lineDataSetStolenBikes);
 
-
         LineData dataStolenBikes = new LineData(xValsStolenBikes, dataSetsStolenBikes);
+        dataStolenBikes.setValueTextSize(14f);
+
         graphStolenBikes.setData(dataStolenBikes);
 
         graphStolenBikes.invalidate();
+
+        //      BAR-GRAPH       //
+
+        graphCombi.setTouchEnabled(true);
+
+
+
+        //      PIE-BRANDS      //
+
+        graphBrands.setTouchEnabled(true);
+
+        ArrayList<String> labelsBrands = new ArrayList<>();
+        for (ArrayList<Pair<String, String>> row:listBrands) {
+            labelsBrands.add(row.get(1).second);
+        }
+
+        List<Entry> entryBrands = new ArrayList<>();
+        for (int i = 0; i < listBrands.size(); i++){
+            entryBrands.add(new Entry(Float.parseFloat(listBrands.get(i).get(0).second), i));
+        }
+
+        PieDataSet dataSetBrands = new PieDataSet(entryBrands, "Populairste merk bij gestolen fietsen.");
+        dataSetBrands.setColors(ColorTemplate.JOYFUL_COLORS);
+
+        PieData dataBrands = new PieData(labelsBrands, dataSetBrands);
+        graphBrands.setData(dataBrands);
+
+        graphBrands.setDescription("Description.");
+
+        graphBrands.invalidate();
+
+    }
+
+    public static void Spinner(Spinner spinnerCombi){
+
     }
 }

@@ -14,12 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -39,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textViewDebug;
     private String jsonString;
-
 
     private static final String JSON_URL = "http://188.166.26.149/userstory1.php?querynum=";
 
@@ -65,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
     private void initializeTabs()
     {
         TabHost tabhost = (TabHost) findViewById(R.id.tabHost);
-
         tabhost.setup();
+
         TabHost.TabSpec tabSpec = tabhost.newTabSpec("StolenBikes");
         tabSpec.setContent(R.id.tabStolenBikes);
         tabSpec.setIndicator("Stolen Bikes");
@@ -74,12 +75,22 @@ public class MainActivity extends AppCompatActivity {
 
         tabSpec = tabhost.newTabSpec("BikeContainers");
         tabSpec.setContent(R.id.tabContainers);
-        tabSpec.setIndicator("Bike Containers");
+        tabSpec.setIndicator("Bike Cont.");
         tabhost.addTab(tabSpec);
 
         tabSpec = tabhost.newTabSpec("Combi");
         tabSpec.setContent(R.id.tabCombi);
-        tabSpec.setIndicator("Combination");
+        tabSpec.setIndicator("Combi- Graph");
+        tabhost.addTab(tabSpec);
+
+        tabSpec = tabhost.newTabSpec("PieBrands");
+        tabSpec.setContent(R.id.tabBrands);
+        tabSpec.setIndicator("Pie Brands");
+        tabhost.addTab(tabSpec);
+
+        tabSpec = tabhost.newTabSpec("PieColors");
+        tabSpec.setContent(R.id.tabColors);
+        tabSpec.setIndicator("Pie Colors");
         tabhost.addTab(tabSpec);
     }
 
@@ -95,14 +106,22 @@ public class MainActivity extends AppCompatActivity {
         BarChart graphContainers = (BarChart) findViewById(R.id.graphContainers);
         LineChart graphStolenBikes = (LineChart) findViewById(R.id.graphStolenBikes);
         BarChart graphCombi = (BarChart) findViewById(R.id.graphCombi);
+        PieChart graphBrands = (PieChart) findViewById(R.id.graphBrands);
+        PieChart graphColors = (PieChart) findViewById(R.id.graphColors);
 
         initializeTabs();
         ArrayList<ArrayList<ArrayList<Pair<String,String>>>> listQueries = new ArrayList<>();
         for (int i = 0; i < 3; i++){
             listQueries.add(initializeJSON(Integer.toString(i+1)));
         }
+            listQueries.add(initializeJSON("6"));
+            listQueries.add(initializeJSON("7"));
 
-        initialize.Graphs(graphContainers, graphStolenBikes, graphCombi, listQueries);
+        initialize.Graphs(listQueries, graphContainers, graphStolenBikes, graphCombi, graphBrands, graphColors);
+
+        Spinner spinnerCombi = (Spinner) findViewById(R.id.spinnerCombi);
+
+        initialize.Spinner(spinnerCombi);
 
 //        textViewDebug = (TextView) findViewById(R.id.textViewDebug);
 
