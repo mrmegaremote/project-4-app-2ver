@@ -89,8 +89,6 @@ public class initialize {
 
         graphCombi.setTouchEnabled(true);
 
-
-
         //      PIE-BRANDS      //
 
         graphBrands.setTouchEnabled(true);
@@ -114,6 +112,32 @@ public class initialize {
         graphBrands.setDescription("Description.");
 
         graphBrands.invalidate();
+
+        //      PIE-COLORS      //
+
+        graphColors.setTouchEnabled(true);
+
+        ArrayList<String> labelsColors = new ArrayList<>();
+        for (ArrayList<Pair<String, String>> row:listColors) {
+            labelsColors.add(row.get(1).second);
+        }
+
+        List<Entry> entryColors = new ArrayList<>();
+        for (int i = 0; i < listColors.size(); i++){
+            entryColors.add(new Entry(Float.parseFloat(listColors.get(i).get(0).second), i));
+        }
+
+        PieDataSet dataSetColors = new PieDataSet(entryColors, "Populairste merk bij gestolen fietsen.");
+        dataSetColors.setColors(ColorTemplate.LIBERTY_COLORS);
+        //TODO: add custom colors in different class
+        //NOTE: return int[] or only hex values?
+
+        PieData dataColors = new PieData(labelsColors, dataSetColors);
+        graphColors.setData(dataColors);
+
+        graphColors.setDescription("Description.");
+
+        graphColors.invalidate();
 
     }
 

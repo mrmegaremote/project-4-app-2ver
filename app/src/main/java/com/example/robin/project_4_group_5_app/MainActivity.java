@@ -124,10 +124,7 @@ public class MainActivity extends AppCompatActivity {
         initialize.Spinner(spinnerCombi);
 
 //        textViewDebug = (TextView) findViewById(R.id.textViewDebug);
-
-
     }
-
     private ArrayList<ArrayList<Pair<String,String>>> initializeJSON(String userstoryQueryNumber) {
         this.jsonString = getJSON(JSON_URL, userstoryQueryNumber);
         return JsonUtil.extractJSON(this.jsonString);
