@@ -12,6 +12,8 @@ import android.util.Pair;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textViewDebug;
     private String jsonString;
+    private ProgressDialog loading;
 
     private static final String JSON_URL = "http://188.166.26.149/userstory1.php?querynum=";
 
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         TabHost.TabSpec tabSpec = tabhost.newTabSpec("StolenBikes");
         tabSpec.setContent(R.id.tabStolenBikes);
-        tabSpec.setIndicator("Stolen Bikes");
+        tabSpec.setIndicator("Theft");
         tabhost.addTab(tabSpec);
 
         tabSpec = tabhost.newTabSpec("BikeContainers");
@@ -80,17 +83,17 @@ public class MainActivity extends AppCompatActivity {
 
         tabSpec = tabhost.newTabSpec("Combi");
         tabSpec.setContent(R.id.tabCombi);
-        tabSpec.setIndicator("Combi- Graph");
+        tabSpec.setIndicator("Combi Graph");
         tabhost.addTab(tabSpec);
 
         tabSpec = tabhost.newTabSpec("PieBrands");
         tabSpec.setContent(R.id.tabBrands);
-        tabSpec.setIndicator("Pie Brands");
+        tabSpec.setIndicator("Brand");
         tabhost.addTab(tabSpec);
 
         tabSpec = tabhost.newTabSpec("PieColors");
         tabSpec.setContent(R.id.tabColors);
-        tabSpec.setIndicator("Pie Colors");
+        tabSpec.setIndicator("Color");
         tabhost.addTab(tabSpec);
     }
 
@@ -101,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void secondHomeButtonClick(View view)
     {
+        loading = ProgressDialog.show(MainActivity.this, "Wan moment...", null, true, true);
+
         setContentView(R.layout.tabbedgraph);
 
         BarChart graphContainers = (BarChart) findViewById(R.id.graphContainers);
@@ -111,19 +116,20 @@ public class MainActivity extends AppCompatActivity {
 
         initializeTabs();
         ArrayList<ArrayList<ArrayList<Pair<String,String>>>> listQueries = new ArrayList<>();
-        for (int i = 0; i < 3; i++){
-            listQueries.add(initializeJSON(Integer.toString(i+1)));
-        }
-            listQueries.add(initializeJSON("6"));
-            listQueries.add(initializeJSON("7"));
+        listQueries.add(initializeJSON("1"));
+        listQueries.add(initializeJSON("2"));
+        listQueries.add(initializeJSON("3&val='Overschie'"));
+        listQueries.add(initializeJSON("4&val='Overschie'"));
+        listQueries.add(initializeJSON("6"));
+        listQueries.add(initializeJSON("7"));
 
         initialize.Graphs(listQueries, graphContainers, graphStolenBikes, graphCombi, graphBrands, graphColors);
 
         Spinner spinnerCombi = (Spinner) findViewById(R.id.spinnerCombi);
 
-        initialize.Spinner(spinnerCombi);
+        initializeSpinner(spinnerCombi);
 
-//        textViewDebug = (TextView) findViewById(R.id.textViewDebug);
+        loading.dismiss();
     }
     private ArrayList<ArrayList<Pair<String,String>>> initializeJSON(String userstoryQueryNumber) {
         this.jsonString = getJSON(JSON_URL, userstoryQueryNumber);
@@ -133,13 +139,11 @@ public class MainActivity extends AppCompatActivity {
     private String getJSON(final String url, String userstoryQueryNumber) {
         class GetJSON extends AsyncTask<String, Void, String>
         {
-            ProgressDialog loading;
             String jsonString = "Test!";
 
             @Override
             protected void onPreExecute(){
                 super.onPreExecute();
-                loading = ProgressDialog.show(MainActivity.this, "Wan moment...", null, true, true);
 
             }
 
@@ -193,6 +197,31 @@ public class MainActivity extends AppCompatActivity {
         return gj.jsonString;
     }
 
+    private void initializeSpinner(Spinner spinner){
+        ArrayList<String> spinnerArray = new ArrayList<>();
+        ArrayList<ArrayList<Pair<String,String>>> listSpinner = initializeJSON("5");
+
+        for (ArrayList<Pair<String, String>> row:listSpinner) {
+            spinnerArray.add(row.get(1).second);
+        }
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
+
+        spinner.setAdapter(spinnerAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
     public void returnButtonTabbed(View view)
     {
         setContentView(R.layout.activity_main);
@@ -201,19 +230,6 @@ public class MainActivity extends AppCompatActivity {
     public void OnBackButton(View view)
     {
         setContentView(R.layout.content_main);
-    }
-
-    public void OnButtonClick(View view)
-    {
-//        GraphView graph = (GraphView) findViewById(R.id.graph);
-//        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-//                new DataPoint(0, 1),
-//                new DataPoint(1, 5),
-//                new DataPoint(2, 3),
-//                new DataPoint(3, 2),
-//                new DataPoint(4, 6)
-//        });
-//        graph.addSeries(series);
     }
 
     @Override
