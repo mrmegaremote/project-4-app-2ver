@@ -34,6 +34,10 @@
                     android:orientation="vertical"
                     android:onClick="secondHomeButtonClick"
                     android:weightSum="1">
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
                     <com.github.mikephil.charting.charts.LineChart
                         android:layout_width="383dp"
                         android:layout_height="match_parent"
@@ -64,6 +68,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+<<<<<<< HEAD
 
                     <Spinner
                         android:layout_width="300dp"
@@ -71,10 +76,13 @@
                         android:id="@+id/spinnerCombi"
                         android:textAlignment="center"/>
 
+=======
+>>>>>>> parent of 85a9f30... Added two pie charts, made pieBrands work, formatting changes
                     <com.github.mikephil.charting.charts.BarChart
                         android:layout_width="383dp"
                         android:layout_height="match_parent"
                         android:id="@+id/graphCombi"
+<<<<<<< HEAD
                         android:layout_marginTop="100dp" />
 
                 </LinearLayout>
@@ -103,6 +111,11 @@
                     android:layout_marginTop="0dp" />
                 </LinearLayout>
 
+=======
+                        android:layout_marginTop="0dp" />
+                </LinearLayout>
+
+>>>>>>> parent of 85a9f30... Added two pie charts, made pieBrands work, formatting changes
             </FrameLayout>
         </LinearLayout>
     </TabHost>

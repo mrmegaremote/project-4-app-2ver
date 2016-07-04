@@ -2,12 +2,14 @@ package com.example.robin.project_4_group_5_app;
 
 import android.graphics.Color;
 import android.util.Pair;
+<<<<<<< HEAD
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+=======
+>>>>>>> parent of 85a9f30... Added two pie charts, made pieBrands work, formatting changes
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -15,9 +17,12 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+<<<<<<< HEAD
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+=======
+>>>>>>> parent of 85a9f30... Added two pie charts, made pieBrands work, formatting changes
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
@@ -29,27 +34,34 @@ import java.util.List;
  */
 public class initialize {
 
-    public static void Graphs(ArrayList<ArrayList<ArrayList<Pair<String,String>>>> listQueries, BarChart graphContainers, LineChart graphStolenBikes, BarChart graphCombi, PieChart graphBrands, PieChart graphColors){
+    public static void Graphs(BarChart graphContainers, LineChart graphStolenBikes, BarChart graphCombi, ArrayList<ArrayList<ArrayList<Pair<String,String>>>> listQueries){
 
+<<<<<<< HEAD
         ArrayList<ArrayList<Pair<String,String>>> listContainers = listQueries.get(0);
         ArrayList<ArrayList<Pair<String,String>>> listStolenBikes = listQueries.get(1);
         ArrayList<ArrayList<Pair<String,String>>> listCombiThefts = listQueries.get(2);
         ArrayList<ArrayList<Pair<String,String>>> listCombiContainers = listQueries.get(3);
         ArrayList<ArrayList<Pair<String,String>>> listBrands = listQueries.get(4);
         ArrayList<ArrayList<Pair<String,String>>> listColors = listQueries.get(5);
+=======
+        ArrayList<ArrayList<Pair<String,String>>> list0 = listQueries.get(0);
+        ArrayList<ArrayList<Pair<String,String>>> list1 = listQueries.get(1);
+        ArrayList<ArrayList<Pair<String,String>>> list2 = listQueries.get(2);
+>>>>>>> parent of 85a9f30... Added two pie charts, made pieBrands work, formatting changes
 
+        graphContainers.setTouchEnabled(true);
+        graphCombi.setTouchEnabled(true);
 
         //      BAR-GRAPH       //
-        graphContainers.setTouchEnabled(true);
-
         ArrayList<String> labelsContainer = new ArrayList<>();
-        for (ArrayList<Pair<String, String>> row:listContainers) {
+
+        for (ArrayList<Pair<String, String>> row:list0) {
             labelsContainer.add(row.get(1).second);
         }
 
         List<BarEntry> barEntryContainer = new ArrayList<>();
-        for (int i = 0; i < listContainers.size(); i++){
-                barEntryContainer.add(new BarEntry(Float.parseFloat(listContainers.get(i).get(0).second), i));
+        for (int i = 0; i < list0.size(); i++){
+                barEntryContainer.add(new BarEntry(Float.parseFloat(list0.get(i).get(0).second), i));
         }
 
         BarDataSet datasetContainer = new BarDataSet(barEntryContainer, "Aantal fietstrommels.");
@@ -70,9 +82,9 @@ public class initialize {
 
         ArrayList<String> xValsStolenBikes = new ArrayList<String>();
         ArrayList<Entry> entryStolenBikes = new ArrayList<Entry>();
-        for (int i = 0; i < listStolenBikes.size(); i++){
-            entryStolenBikes.add(new Entry(Float.parseFloat(listStolenBikes.get(i).get(0).second), i));
-            xValsStolenBikes.add(listStolenBikes.get(i).get(1).second +  " " + listStolenBikes.get(i).get(2).second);
+        for (int i = 0; i < list1.size(); i++){
+            entryStolenBikes.add(new Entry(Float.parseFloat(list1.get(i).get(0).second), i));
+            xValsStolenBikes.add(list1.get(i).get(1).second +  " " + list1.get(i).get(2).second);
         }
         xValsStolenBikes.add("");
 
@@ -82,12 +94,12 @@ public class initialize {
         ArrayList<ILineDataSet> dataSetsStolenBikes = new ArrayList<ILineDataSet>();
         dataSetsStolenBikes.add(lineDataSetStolenBikes);
 
-        LineData dataStolenBikes = new LineData(xValsStolenBikes, dataSetsStolenBikes);
-        dataStolenBikes.setValueTextSize(14f);
 
+        LineData dataStolenBikes = new LineData(xValsStolenBikes, dataSetsStolenBikes);
         graphStolenBikes.setData(dataStolenBikes);
 
         graphStolenBikes.invalidate();
+<<<<<<< HEAD
 
         //      BAR-GRAPH       //
 
@@ -175,5 +187,7 @@ public class initialize {
 
         graphColors.invalidate();
 
+=======
+>>>>>>> parent of 85a9f30... Added two pie charts, made pieBrands work, formatting changes
     }
 }

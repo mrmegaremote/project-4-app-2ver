@@ -17,14 +17,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -53,7 +51,13 @@ public class MainActivity extends AppCompatActivity {
     FileInputStream fin;
     private TextView textViewDebug;
     private String jsonString;
+<<<<<<< HEAD
     private ProgressDialog loading;
+=======
+
+
+    private static final String JSON_URL = "http://188.166.26.149/userstory1.php?querynum=";
+>>>>>>> parent of 85a9f30... Added two pie charts, made pieBrands work, formatting changes
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeTabs() {
         TabHost tabhost = (TabHost) findViewById(R.id.tabHost);
-        tabhost.setup();
 
+        tabhost.setup();
         TabHost.TabSpec tabSpec = tabhost.newTabSpec("StolenBikes");
         tabSpec.setContent(R.id.tabStolenBikes);
         tabSpec.setIndicator("Theft");
@@ -83,11 +87,12 @@ public class MainActivity extends AppCompatActivity {
 
         tabSpec = tabhost.newTabSpec("BikeContainers");
         tabSpec.setContent(R.id.tabContainers);
-        tabSpec.setIndicator("Bike Cont.");
+        tabSpec.setIndicator("Bike Containers");
         tabhost.addTab(tabSpec);
 
         tabSpec = tabhost.newTabSpec("Combi");
         tabSpec.setContent(R.id.tabCombi);
+<<<<<<< HEAD
         tabSpec.setIndicator("Combi Graph");
         tabhost.addTab(tabSpec);
 
@@ -99,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
         tabSpec = tabhost.newTabSpec("PieColors");
         tabSpec.setContent(R.id.tabColors);
         tabSpec.setIndicator("Color");
+=======
+        tabSpec.setIndicator("Combination");
+>>>>>>> parent of 85a9f30... Added two pie charts, made pieBrands work, formatting changes
         tabhost.addTab(tabSpec);
     }
 
@@ -159,8 +167,6 @@ public class MainActivity extends AppCompatActivity {
         BarChart graphContainers = (BarChart) findViewById(R.id.graphContainers);
         LineChart graphStolenBikes = (LineChart) findViewById(R.id.graphStolenBikes);
         BarChart graphCombi = (BarChart) findViewById(R.id.graphCombi);
-        PieChart graphBrands = (PieChart) findViewById(R.id.graphBrands);
-        PieChart graphColors = (PieChart) findViewById(R.id.graphColors);
 
         initializeTabs();
 <<<<<<< HEAD
@@ -168,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 3; i++) {
             listQueries.add(initializeJSON(Integer.toString(i + 1)));
         }
+<<<<<<< HEAD
 =======
         ArrayList<ArrayList<ArrayList<Pair<String,String>>>> listQueries = new ArrayList<>();
         listQueries.add(initializeJSON("1"));
@@ -183,6 +190,13 @@ public class MainActivity extends AppCompatActivity {
         Spinner spinnerCombi = (Spinner) findViewById(R.id.spinnerCombi);
 
         initializeSpinner(spinnerCombi);
+=======
+
+        initialize.Graphs(graphContainers, graphStolenBikes, graphCombi, listQueries);
+
+//        textViewDebug = (TextView) findViewById(R.id.textViewDebug);
+
+>>>>>>> parent of 85a9f30... Added two pie charts, made pieBrands work, formatting changes
 
         loading.dismiss();
     }
