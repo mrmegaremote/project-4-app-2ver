@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         String str = "";
         fOut.write(str.getBytes());
         fOut.close();
-        Toast t = Toast.makeText(MainActivity.this, "the location has been deleted", Toast.LENGTH_SHORT);
+        Toast t = Toast.makeText(MainActivity.this, "The saved location has been deleted.", Toast.LENGTH_SHORT);
         t.show();
     }
 
