@@ -1,6 +1,8 @@
 package com.example.robin.project_4_group_5_app;
 
+import android.graphics.Color;
 import android.util.Pair;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -15,6 +17,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
@@ -30,9 +33,10 @@ public class initialize {
 
         ArrayList<ArrayList<Pair<String,String>>> listContainers = listQueries.get(0);
         ArrayList<ArrayList<Pair<String,String>>> listStolenBikes = listQueries.get(1);
-        ArrayList<ArrayList<Pair<String,String>>> listCombi = listQueries.get(2);
-        ArrayList<ArrayList<Pair<String,String>>> listBrands = listQueries.get(3);
-        ArrayList<ArrayList<Pair<String,String>>> listColors = listQueries.get(4);
+        ArrayList<ArrayList<Pair<String,String>>> listCombiThefts = listQueries.get(2);
+        ArrayList<ArrayList<Pair<String,String>>> listCombiContainers = listQueries.get(3);
+        ArrayList<ArrayList<Pair<String,String>>> listBrands = listQueries.get(4);
+        ArrayList<ArrayList<Pair<String,String>>> listColors = listQueries.get(5);
 
 
         //      BAR-GRAPH       //
@@ -89,6 +93,36 @@ public class initialize {
 
         graphCombi.setTouchEnabled(true);
 
+        ArrayList<String> labelsCombi = new ArrayList<>();
+        for (ArrayList<Pair<String, String>> row:listCombiThefts) {
+            labelsCombi.add(row.get(1).second + " " + row.get(2).second);
+        }
+
+        List<BarEntry> barEntryCombiThefts = new ArrayList<>();
+        List<BarEntry> barEntryCombiContainers = new ArrayList<>();
+        for (int i = 0; i < listCombiThefts.size(); i++){
+            barEntryCombiThefts.add(new BarEntry(Float.parseFloat(listCombiThefts.get(i).get(0).second), i));
+            barEntryCombiContainers.add(new BarEntry(Float.parseFloat(listCombiContainers.get(0).get(0).second), i));
+        }
+
+        BarDataSet dataSetCombiThefts = new BarDataSet(barEntryCombiThefts, "Amount of bike thefts");
+        dataSetCombiThefts.setColor(Color.RED, 170);
+        BarDataSet dataSetCombiContainers = new BarDataSet(barEntryCombiContainers, "Amount of bike containers");
+        dataSetCombiContainers.setColor(Color.BLUE, 70);
+
+        ArrayList<IBarDataSet> dataSetsCombi = new ArrayList<>();
+        dataSetsCombi.add(dataSetCombiThefts);
+        dataSetsCombi.add(dataSetCombiContainers);
+
+        BarData dataCombi = new BarData(labelsCombi, dataSetsCombi);
+
+        graphCombi.setData(dataCombi);
+        graphCombi.setDescription("");
+        graphCombi.zoom(8.8f, 1f, 2, 1);
+
+        graphCombi.animateY(3000);
+
+        graphCombi.invalidate();
 
 
         //      PIE-BRANDS      //
@@ -111,13 +145,35 @@ public class initialize {
         PieData dataBrands = new PieData(labelsBrands, dataSetBrands);
         graphBrands.setData(dataBrands);
 
-        graphBrands.setDescription("Description.");
+        graphBrands.setDescription("Brands Description.");
 
         graphBrands.invalidate();
 
-    }
+        //      PIE-COLORS      //
 
-    public static void Spinner(Spinner spinnerCombi){
+        graphColors.setTouchEnabled(true);
+
+        ArrayList<String> labelsColors = new ArrayList<>();
+        for (ArrayList<Pair<String, String>> row:listColors) {
+            labelsColors.add(row.get(1).second);
+        }
+
+        List<Entry> entryColors = new ArrayList<>();
+        for (int i = 0; i < listColors.size(); i++){
+            entryColors.add(new Entry(Float.parseFloat(listColors.get(i).get(0).second), i));
+        }
+
+        PieDataSet dataSetColors = new PieDataSet(entryColors, "Populairste merk bij gestolen fietsen.");
+        dataSetColors.setColors(ColorTemplate.LIBERTY_COLORS);
+        //TODO: add custom colors in different class
+        //NOTE: return int[] or only hex values?
+
+        PieData dataColors = new PieData(labelsColors, dataSetColors);
+        graphColors.setData(dataColors);
+
+        graphColors.setDescription("Colors Description.");
+
+        graphColors.invalidate();
 
     }
 }

@@ -32,6 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
+                    android:onClick="secondHomeButtonClick"
                     android:weightSum="1">
                     <com.github.mikephil.charting.charts.LineChart
                         android:layout_width="383dp"
@@ -49,10 +50,10 @@
                 <LinearLayout
                     android:id="@+id/tabContainers"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="200dp"
                     android:orientation="vertical">
                     <com.github.mikephil.charting.charts.BarChart
-                        android:layout_width="383dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/graphContainers"
                         android:layout_marginTop="0dp" />
@@ -67,7 +68,8 @@
                     <Spinner
                         android:layout_width="300dp"
                         android:layout_height="80dp"
-                        android:id="@+id/spinnerCombi" />
+                        android:id="@+id/spinnerCombi"
+                        android:textAlignment="center"/>
 
                     <com.github.mikephil.charting.charts.BarChart
                         android:layout_width="383dp"
@@ -83,7 +85,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
                     <com.github.mikephil.charting.charts.PieChart
-                        android:layout_width="383dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/graphBrands"
                         android:layout_marginTop="0dp" />
@@ -95,7 +97,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
                 <com.github.mikephil.charting.charts.PieChart
-                    android:layout_width="383dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/graphColors"
                     android:layout_marginTop="0dp" />
