@@ -1,6 +1,7 @@
 package com.example.robin.project_4_group_5_app;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,6 +31,11 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -41,20 +47,20 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String JSON_URL = "http://188.166.26.149/userstory1.php?querynum=";
+    public FileOutputStream fOut;
+    TextView textViewReader;
+    FileInputStream fin;
     private TextView textViewDebug;
     private String jsonString;
     private ProgressDialog loading;
-
-    private static final String JSON_URL = "http://188.166.26.149/userstory1.php?querynum=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,11 +72,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initializeTabs()
-    {
+    private void initializeTabs() {
         TabHost tabhost = (TabHost) findViewById(R.id.tabHost);
-        tabhost.setup();
 
+        tabhost.setup();
         TabHost.TabSpec tabSpec = tabhost.newTabSpec("StolenBikes");
         tabSpec.setContent(R.id.tabStolenBikes);
         tabSpec.setIndicator("Theft");
@@ -78,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabSpec = tabhost.newTabSpec("BikeContainers");
         tabSpec.setContent(R.id.tabContainers);
-        tabSpec.setIndicator("Bike Cont.");
+        tabSpec.setIndicator("Bike Containers");
         tabhost.addTab(tabSpec);
 
         tabSpec = tabhost.newTabSpec("Combi");
@@ -97,9 +102,48 @@ public class MainActivity extends AppCompatActivity {
         tabhost.addTab(tabSpec);
     }
 
-    public void HomeButtonClick(View view)
-    {
+    public void HomeButtonClick(View view) throws FileNotFoundException {
         setContentView(R.layout.screen_1);
+        textViewReader = (TextView) findViewById(R.id.textViewReader);
+    }
+
+    public void OnSaveClick(View view) throws IOException {
+        fOut = openFileOutput("file.txt", MODE_PRIVATE);
+        String str = "this is where the location will be saved";
+        fOut.write(str.getBytes());
+        fOut.close();
+        Toast t = Toast.makeText(MainActivity.this, "the location has been saved", Toast.LENGTH_SHORT);
+        t.show();
+    }
+
+    public void OnReadClick(View view) throws IOException {
+        try {
+            fin = openFileInput("file.txt");
+            int c;
+            String temp = "";
+            while ((c = fin.read()) != -1) {
+                temp = temp + Character.toString((char) c);
+
+            }
+            if (temp.length() > 0) {
+                textViewReader.setText(temp);
+                Toast t = Toast.makeText(MainActivity.this, "A location has been found", Toast.LENGTH_SHORT);
+                t.show();
+            }
+        } catch (Exception e) {return;
+        }
+
+        //string temp contains all the data of the file.
+        fin.close();
+    }
+
+    public void OnDeleteClick(View view) throws IOException {
+        fOut = openFileOutput("file.txt", MODE_PRIVATE);
+        String str = "";
+        fOut.write(str.getBytes());
+        fOut.close();
+        Toast t = Toast.makeText(MainActivity.this, "the location has been deleted", Toast.LENGTH_SHORT);
+        t.show();
     }
 
     public void secondHomeButtonClick(View view)
@@ -115,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
         PieChart graphColors = (PieChart) findViewById(R.id.graphColors);
 
         initializeTabs();
+
         ArrayList<ArrayList<ArrayList<Pair<String,String>>>> listQueries = new ArrayList<>();
         listQueries.add(initializeJSON("1"));
         listQueries.add(initializeJSON("2"));
@@ -129,8 +174,11 @@ public class MainActivity extends AppCompatActivity {
 
         initializeSpinner(spinnerCombi);
 
+//        textViewDebug = (TextView) findViewById(R.id.textViewDebug);
+
         loading.dismiss();
     }
+
     private ArrayList<ArrayList<Pair<String,String>>> initializeJSON(String userstoryQueryNumber) {
         this.jsonString = getJSON(JSON_URL, userstoryQueryNumber);
         return JsonUtil.extractJSON(this.jsonString);
@@ -142,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
             String jsonString = "Test!";
 
             @Override
-            protected void onPreExecute(){
+            protected void onPreExecute() {
                 super.onPreExecute();
 
             }
@@ -154,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
 
                 BufferedReader bufferedReader = null;
 
-                try{
+                try {
                     URL url = new URL(uri);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     StringBuilder sb = new StringBuilder();
@@ -162,13 +210,13 @@ public class MainActivity extends AppCompatActivity {
                     bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
                     String json;
-                    while((json = bufferedReader.readLine()) != null){
-                        sb.append(json+"\n");
+                    while ((json = bufferedReader.readLine()) != null) {
+                        sb.append(json + "\n");
                     }
 
                     return sb.toString().trim();
 
-                } catch(Exception e){
+                } catch (Exception e) {
                     Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                     return e.toString();
                 }
@@ -176,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onPostExecute(String s){
+            protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 loading.dismiss();
             }
@@ -189,9 +237,7 @@ public class MainActivity extends AppCompatActivity {
             gj.jsonString = (gj.get());
 //            textViewDebug.setText(gj.jsonString);
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.exit(1337);
         }
         return gj.jsonString;
@@ -227,8 +273,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void OnBackButton(View view)
-    {
+    public void OnBackButton(View view) {
         setContentView(R.layout.content_main);
     }
 

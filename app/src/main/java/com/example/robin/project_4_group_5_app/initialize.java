@@ -38,11 +38,12 @@ public class initialize {
         ArrayList<ArrayList<Pair<String,String>>> listBrands = listQueries.get(4);
         ArrayList<ArrayList<Pair<String,String>>> listColors = listQueries.get(5);
 
+        graphContainers.setTouchEnabled(true);
+        graphCombi.setTouchEnabled(true);
 
         //      BAR-GRAPH       //
-        graphContainers.setTouchEnabled(true);
-
         ArrayList<String> labelsContainer = new ArrayList<>();
+
         for (ArrayList<Pair<String, String>> row:listContainers) {
             labelsContainer.add(row.get(1).second);
         }
@@ -82,9 +83,8 @@ public class initialize {
         ArrayList<ILineDataSet> dataSetsStolenBikes = new ArrayList<ILineDataSet>();
         dataSetsStolenBikes.add(lineDataSetStolenBikes);
 
-        LineData dataStolenBikes = new LineData(xValsStolenBikes, dataSetsStolenBikes);
-        dataStolenBikes.setValueTextSize(14f);
 
+        LineData dataStolenBikes = new LineData(xValsStolenBikes, dataSetsStolenBikes);
         graphStolenBikes.setData(dataStolenBikes);
 
         graphStolenBikes.invalidate();

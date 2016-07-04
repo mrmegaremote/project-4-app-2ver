@@ -12,4 +12,41 @@
         android:layout_x="29dp"
         android:layout_y="294dp"
         android:onClick="OnBackButton" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="delete"
+        android:id="@+id/DeleteButton"
+        android:layout_above="@+id/screen_1_back_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="69dp"
+        android:onClick="OnDeleteClick" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="read"
+        android:id="@+id/ReadButton"
+        android:layout_above="@+id/DeleteButton"
+        android:layout_centerHorizontal="true"
+        android:onClick="OnReadClick" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="save"
+        android:id="@+id/SaveButton"
+        android:layout_above="@+id/ReadButton"
+        android:layout_centerHorizontal="true"
+        android:onClick="OnSaveClick" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="asdfffffffffffffffffffffffffff"
+        android:id="@+id/textViewReader"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="90dp" />
 </RelativeLayout>
