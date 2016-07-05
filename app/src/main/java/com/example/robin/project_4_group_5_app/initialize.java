@@ -56,12 +56,15 @@ public class initialize {
 
         BarDataSet datasetContainer = new BarDataSet(barEntryContainer, "Aantal fietstrommels.");
         datasetContainer.setColors(ColorTemplate.JOYFUL_COLORS);
+//        datasetContainer.setColor();
+        //TODO:
 
         BarData dataContainer = new BarData(labelsContainer, datasetContainer);
         dataContainer.setValueTextSize(20);
 
         graphContainers.setData(dataContainer);
         graphContainers.setDescription("5 gemeentes met de meeste fietstrommels.");
+        //TODO: in de gemeente van rotterdam
         graphContainers.resetViewPortOffsets();
         graphContainers.fitScreen();
         graphContainers.zoom(2.5f, 0f, 2, 0);
@@ -83,7 +86,7 @@ public class initialize {
         }
         xValsStolenBikes.add("");
 
-        LineDataSet lineDataSetStolenBikes = new LineDataSet(entryStolenBikes, "Gestolen fietsen.");
+        LineDataSet lineDataSetStolenBikes = new LineDataSet(entryStolenBikes, "Aantal gestolen fietsen in Rotterdam.");
         lineDataSetStolenBikes.setAxisDependency(YAxis.AxisDependency.LEFT);
         lineDataSetStolenBikes.setColor(Color.GRAY, 170);
 

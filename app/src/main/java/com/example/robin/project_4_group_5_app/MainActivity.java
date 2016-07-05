@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     FileInputStream fin;
     private TextView textViewDebug;
     private String jsonString;
-    private ProgressDialog loading;
     private BarChart graphContainers;
     private LineChart graphStolenBikes;
     private BarChart graphCombi;
@@ -114,8 +113,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void HomeButtonClick(View view) throws FileNotFoundException {
-        setContentView(R.layout.screen_1);
         textViewReader = (TextView) findViewById(R.id.textViewReader);
+
+        //      MAPS        //
+        setContentView(R.layout.activity_maps);
+        ArrayList<ArrayList<Pair<String, String>>> lnglatContainers = initializeJSON("9");
+
+        ArrayList<String> latContainers = new ArrayList<>();
+        ArrayList<String> lngContainers = new ArrayList<>();
+
+        for (ArrayList<Pair<String, String>> row:lnglatContainers) {
+            latContainers.add(row.get(0).second);
+            lngContainers.add(row.get(1).second);
+        }
+
+        Bundle extrasContainers = new Bundle();
+        extrasContainers.putStringArrayList("0", latContainers);
+        extrasContainers.putStringArrayList("1", lngContainers);
+
+        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+        intent.putExtras(extrasContainers);
+
+        startActivity(intent);
     }
 
     public void OnSaveClick(View view) throws IOException {
@@ -159,8 +178,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void secondHomeButtonClick(View view)
     {
-        loading = ProgressDialog.show(MainActivity.this, "Wan moment...", null, true, true);
-
         setContentView(R.layout.tabbedgraph);
 
         graphContainers = (BarChart) findViewById(R.id.graphContainers);
@@ -188,8 +205,6 @@ public class MainActivity extends AppCompatActivity {
         initializeSpinner(spinnerCombi, graphCombi, this);
 
 //        textViewDebug = (TextView) findViewById(R.id.textViewDebug);
-
-        loading.dismiss();
     }
 
     private ArrayList<ArrayList<Pair<String,String>>> initializeJSON(String userstoryQueryNumber) {
@@ -239,7 +254,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                loading.dismiss();
             }
         }
 
