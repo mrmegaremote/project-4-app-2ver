@@ -25,7 +25,7 @@
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
-                android:layout_height="458dp">
+                android:layout_height="420dp">
 
                 <LinearLayout
                     android:id="@+id/tabStolenBikes"
@@ -114,8 +114,15 @@
                     android:id="@+id/graphColors"
                     android:layout_marginTop="0dp" />
                 </LinearLayout>
-
             </FrameLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Back"
+                android:id="@+id/screen_1_back_button"
+                android:layout_marginBottom="0dp"
+                android:onClick="OnBackButton" />
         </LinearLayout>
     </TabHost>
 

@@ -63,7 +63,7 @@ public class initialize {
         dataContainer.setValueTextSize(20);
 
         graphContainers.setData(dataContainer);
-        graphContainers.setDescription("5 gemeentes met de meeste fietstrommels.");
+        graphContainers.setDescription("Plaatsen in Rotterdam met de meeste fietstrommels.");
         //TODO: in de gemeente van rotterdam
         graphContainers.resetViewPortOffsets();
         graphContainers.fitScreen();
@@ -131,14 +131,14 @@ public class initialize {
         BarData dataCombi = new BarData(labelsCombi, dataSetsCombi);
 
         graphCombi.setData(dataCombi);
-        graphCombi.setDescription("");
-        graphCombi.resetViewPortOffsets();
-        graphCombi.fitScreen();
-        graphCombi.zoom(3f, 0f, 2, 0);
-
-        graphCombi.animateY(3000);
-
-        graphCombi.invalidate();
+//        graphCombi.setDescription("");
+//        graphCombi.resetViewPortOffsets();
+//        graphCombi.fitScreen();
+//        graphCombi.zoom(3f, 0f, 2, 0);
+//
+//        graphCombi.animateY(3000);
+//
+//        graphCombi.invalidate();
 
 
         //      PIE-BRANDS      //

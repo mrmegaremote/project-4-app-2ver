@@ -47,7 +47,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         mMap.setMyLocationEnabled(true);
-
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(51.823963, 4.477295)));
     }
 }

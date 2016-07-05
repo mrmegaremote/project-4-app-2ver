@@ -304,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void OnBackButton(View view) {
-        setContentView(R.layout.content_main);
+        setContentView(R.layout.activity_main);
     }
 
     @Override
