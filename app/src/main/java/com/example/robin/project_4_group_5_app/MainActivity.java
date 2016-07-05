@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         textViewReader = (TextView) findViewById(R.id.textViewReader);
 
         //      MAPS        //
-        setContentView(R.layout.activity_maps);
+//        setContentView(R.layout.activity_maps);
         ArrayList<ArrayList<Pair<String, String>>> lnglatContainers = initializeJSON("9");
 
         ArrayList<String> latContainers = new ArrayList<>();

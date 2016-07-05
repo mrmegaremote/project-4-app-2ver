@@ -1,6 +1,8 @@
 package com.example.robin.project_4_group_5_app;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
@@ -42,10 +44,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        for (int i = 0; i<lngContainers.size(); i++) {
+        for (int i = 0; i < lngContainers.size(); i++) {
             mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(latContainers.get(i)), Double.parseDouble(lngContainers.get(i)))).title("Bike Container"));
         }
 
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         mMap.setMyLocationEnabled(true);
     }
 }
