@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.util.Pair;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -39,11 +40,11 @@ public class initialize {
         ArrayList<ArrayList<Pair<String,String>>> listColors = listQueries.get(5);
 
         graphContainers.setTouchEnabled(true);
-        graphCombi.setTouchEnabled(true);
+        graphContainers.getLegend().setWordWrapEnabled(true);
 
         //      BAR-GRAPH       //
-        ArrayList<String> labelsContainer = new ArrayList<>();
 
+        ArrayList<String> labelsContainer = new ArrayList<>();
         for (ArrayList<Pair<String, String>> row:listContainers) {
             labelsContainer.add(row.get(1).second);
         }
@@ -57,9 +58,13 @@ public class initialize {
         datasetContainer.setColors(ColorTemplate.JOYFUL_COLORS);
 
         BarData dataContainer = new BarData(labelsContainer, datasetContainer);
+        dataContainer.setValueTextSize(20);
 
         graphContainers.setData(dataContainer);
         graphContainers.setDescription("5 gemeentes met de meeste fietstrommels.");
+        graphContainers.resetViewPortOffsets();
+        graphContainers.fitScreen();
+        graphContainers.zoom(2.5f, 0f, 2, 0);
 
         graphContainers.animateY(3000);
 
@@ -68,6 +73,7 @@ public class initialize {
         //      LINE-GRAPH      //
 
         graphStolenBikes.setTouchEnabled(true);
+        graphStolenBikes.getLegend().setWordWrapEnabled(true);
 
         ArrayList<String> xValsStolenBikes = new ArrayList<String>();
         ArrayList<Entry> entryStolenBikes = new ArrayList<Entry>();
@@ -79,19 +85,24 @@ public class initialize {
 
         LineDataSet lineDataSetStolenBikes = new LineDataSet(entryStolenBikes, "Gestolen fietsen.");
         lineDataSetStolenBikes.setAxisDependency(YAxis.AxisDependency.LEFT);
+        lineDataSetStolenBikes.setColor(Color.GRAY, 170);
 
         ArrayList<ILineDataSet> dataSetsStolenBikes = new ArrayList<ILineDataSet>();
         dataSetsStolenBikes.add(lineDataSetStolenBikes);
 
-
         LineData dataStolenBikes = new LineData(xValsStolenBikes, dataSetsStolenBikes);
         graphStolenBikes.setData(dataStolenBikes);
+
+        graphStolenBikes.resetViewPortOffsets();
+        graphStolenBikes.fitScreen();
+        graphStolenBikes.zoom(9.5f, 0f, 2, 0);
 
         graphStolenBikes.invalidate();
 
         //      BAR-GRAPH       //
 
         graphCombi.setTouchEnabled(true);
+        graphCombi.getLegend().setWordWrapEnabled(true);
 
         ArrayList<String> labelsCombi = new ArrayList<>();
         for (ArrayList<Pair<String, String>> row:listCombiThefts) {
@@ -118,7 +129,9 @@ public class initialize {
 
         graphCombi.setData(dataCombi);
         graphCombi.setDescription("");
-        graphCombi.zoom(8.8f, 1f, 2, 1);
+        graphCombi.resetViewPortOffsets();
+        graphCombi.fitScreen();
+        graphCombi.zoom(3f, 0f, 2, 0);
 
         graphCombi.animateY(3000);
 
@@ -128,6 +141,7 @@ public class initialize {
         //      PIE-BRANDS      //
 
         graphBrands.setTouchEnabled(true);
+        graphBrands.getLegend().setWordWrapEnabled(true);
 
         ArrayList<String> labelsBrands = new ArrayList<>();
         for (ArrayList<Pair<String, String>> row:listBrands) {
@@ -152,6 +166,7 @@ public class initialize {
         //      PIE-COLORS      //
 
         graphColors.setTouchEnabled(true);
+        graphColors.getLegend().setWordWrapEnabled(true);
 
         ArrayList<String> labelsColors = new ArrayList<>();
         for (ArrayList<Pair<String, String>> row:listColors) {
@@ -175,5 +190,66 @@ public class initialize {
 
         graphColors.invalidate();
 
+    }
+    public static void Combi(BarChart graphCombi, ArrayList<ArrayList<Pair<String,String>>> listCombiThefts, ArrayList<ArrayList<Pair<String,String>>> listCombiContainers, TextView textErrorMsg){
+
+        List<String> stringList = graphCombi.getBarData().getXVals();
+
+        List<BarEntry> barEntryCombiContainers = new ArrayList<>();;
+        List<BarEntry> barEntryCombiThefts = new ArrayList<>();
+
+        if (listCombiThefts.size()<30 && listCombiContainers.size() == 0){
+            for (int i = 0; i < 30; i++) {
+                barEntryCombiThefts.add(new BarEntry(0, i));
+                //TODO: change TextView to say "No data for thefts."
+                barEntryCombiContainers.add(new BarEntry(0, i));
+                //TODO: change TextView to say "No data for containers."
+                textErrorMsg.setText("No data found for thefts or containers in this area.");
+            }
+        }
+        else if (listCombiThefts.size()<30){
+            for (int i = 0; i < 30; i++) {
+                barEntryCombiThefts.add(new BarEntry(0, i));
+                //TODO: change TextView to say "No data for thefts."
+                barEntryCombiContainers.add(new BarEntry(Float.parseFloat(listCombiContainers.get(0).get(0).second), i));
+                textErrorMsg.setText("No data found for thefts in this area.");
+            }
+        }
+        else if (listCombiContainers.size() == 0){
+            for (int i = 0; i < 30; i++) {
+                barEntryCombiThefts.add(new BarEntry(Float.parseFloat(listCombiThefts.get(i).get(0).second), i));
+                barEntryCombiContainers.add(new BarEntry(0, i));
+                //TODO: change TextView to say "No data for containers."
+                textErrorMsg.setText("No data found for containers in this area.");
+            }
+        }
+        else{
+            for (int i = 0; i < 30; i++){
+                barEntryCombiThefts.add(new BarEntry(Float.parseFloat(listCombiThefts.get(i).get(0).second), i));
+                barEntryCombiContainers.add(new BarEntry(Float.parseFloat(listCombiContainers.get(0).get(0).second), i));
+                textErrorMsg.setText("");
+            }
+        }
+
+        BarDataSet dataSetCombiThefts = new BarDataSet(barEntryCombiThefts, "Amount of bike thefts");
+        dataSetCombiThefts.setColor(Color.RED, 170);
+        BarDataSet dataSetCombiContainers = new BarDataSet(barEntryCombiContainers, "Amount of bike containers");
+        dataSetCombiContainers.setColor(Color.BLUE, 70);
+
+        ArrayList<IBarDataSet> dataSetsCombi = new ArrayList<>();
+        dataSetsCombi.add(dataSetCombiThefts);
+        dataSetsCombi.add(dataSetCombiContainers);
+
+        BarData dataCombi = new BarData(stringList, dataSetsCombi);
+
+        graphCombi.setData(dataCombi);
+        graphCombi.setDescription("");
+        graphCombi.resetViewPortOffsets();
+        graphCombi.fitScreen();
+        graphCombi.zoom(8.7f, 0f, 2, 0);
+
+        graphCombi.animateY(700);
+
+        graphCombi.invalidate();
     }
 }

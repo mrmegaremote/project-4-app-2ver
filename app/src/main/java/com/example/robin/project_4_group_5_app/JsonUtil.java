@@ -19,7 +19,6 @@ public class JsonUtil {
         try {
             JSONArray jsonList = new JSONObject(jsonString).getJSONArray("result");
 
-
             ArrayList<ArrayList<Pair<String, String>>> data = new ArrayList<ArrayList<Pair<String, String>>>();
 
             for(int i = 0; i < jsonList.length(); i++) {

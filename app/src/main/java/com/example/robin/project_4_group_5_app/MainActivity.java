@@ -3,6 +3,7 @@ package com.example.robin.project_4_group_5_app;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -54,6 +55,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewDebug;
     private String jsonString;
     private ProgressDialog loading;
+    private BarChart graphContainers;
+    private LineChart graphStolenBikes;
+    private BarChart graphCombi;
+    private PieChart graphBrands;
+    private PieChart graphColors;
+    private TextView textErrorMsg;
+    private Typeface ComicSansMS;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        ComicSansMS = Typeface.createFromAsset(getAssets(), "comicsansms.ttf");
 
     }
 
@@ -152,11 +163,13 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.tabbedgraph);
 
-        BarChart graphContainers = (BarChart) findViewById(R.id.graphContainers);
-        LineChart graphStolenBikes = (LineChart) findViewById(R.id.graphStolenBikes);
-        BarChart graphCombi = (BarChart) findViewById(R.id.graphCombi);
-        PieChart graphBrands = (PieChart) findViewById(R.id.graphBrands);
-        PieChart graphColors = (PieChart) findViewById(R.id.graphColors);
+        graphContainers = (BarChart) findViewById(R.id.graphContainers);
+        graphStolenBikes = (LineChart) findViewById(R.id.graphStolenBikes);
+        graphCombi = (BarChart) findViewById(R.id.graphCombi);
+        graphBrands = (PieChart) findViewById(R.id.graphBrands);
+        graphColors = (PieChart) findViewById(R.id.graphColors);
+        textErrorMsg = (TextView) findViewById(R.id.textErrorMsg);
+        textErrorMsg.setTypeface(ComicSansMS);
 
         initializeTabs();
 
@@ -172,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 
         Spinner spinnerCombi = (Spinner) findViewById(R.id.spinnerCombi);
 
-        initializeSpinner(spinnerCombi);
+        initializeSpinner(spinnerCombi, graphCombi, this);
 
 //        textViewDebug = (TextView) findViewById(R.id.textViewDebug);
 
@@ -243,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
         return gj.jsonString;
     }
 
-    private void initializeSpinner(Spinner spinner){
+    private void initializeSpinner(Spinner spinner, BarChart graphCombi, final MainActivity mainActivity){
         ArrayList<String> spinnerArray = new ArrayList<>();
         ArrayList<ArrayList<Pair<String,String>>> listSpinner = initializeJSON("5");
 
@@ -258,7 +271,10 @@ public class MainActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView valView = (TextView) view;
+                CharSequence val = valView.getText();
 
+                initialize.Combi(mainActivity.graphCombi, mainActivity.initializeJSON("3&val='"+val+"'"), mainActivity.initializeJSON("4&val='"+val+"'"), mainActivity.textErrorMsg);
             }
 
             @Override
