@@ -12,10 +12,10 @@ import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.util.*;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -43,6 +43,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private MainActivity mainActivity;
     LocationManager mLocationManager;
 
+    Location myLocation;
+
     ArrayList<String> latContainers;
     ArrayList<String> lngContainers;
 
@@ -50,6 +52,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     String currentLng;
 
     Button buttonFindContainer;
+
+    ArrayList<ArrayList<Pair<String, String>>> lnglatContainers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         buttonFindContainer = (Button) findViewById(R.id.buttonFindContainer);
-
     }
 
     @Override
@@ -69,35 +72,62 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
+        latContainers = new ArrayList<>();
+        lngContainers = new ArrayList<>();
+
         //get current location
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+
         mMap.setMyLocationEnabled(true);
 
-        Location myLocation = getLastKnownLocation();
-
-        currentLat = Double.toString(myLocation.getLatitude());
-        currentLng = Double.toString(myLocation.getLongitude());
+//        //make jsonString for parsing
+//        String jsonString = "10&val=1" +
+//                "&lat=" + currentLat + "&lng=" + currentLng;
 
         //make jsonString for parsing
         String jsonString = "10&val=1" +
-                "&lat=" + currentLat + "&lng=" + currentLng;
+                "&lat=51.91738&lng=4.48392";
 
         //get list of coordinates of bike container
-        ArrayList<ArrayList<android.util.Pair<String, String>>> lnglatContainers;
-
         lnglatContainers = JSONAdapter.initializeJSON(jsonString);
 
-        //make string lists for lat and lng
-        ArrayList<String> latContainers = new ArrayList<>();
-        ArrayList<String> lngContainers = new ArrayList<>();
+//        if (lnglatContainers.size()==0){
+//            String id  = "0";
+//            String lat = "51.4";
+//            String lng = "4.8";
+//            String dist = "0.9";
+//            Pair<String, String> pair0 = new Pair<>("id", id);
+//            Pair<String, String> pair1 = new Pair<>("Latitude", lat);
+//            Pair<String, String> pair2 = new Pair<>("Longitude", lat);
+//            Pair<String, String> pair3 = new Pair<>("dist", dist);
+//            ArrayList<Pair<String, String>> arrayList = new ArrayList<>();
+//            arrayList.add(pair0);
+//            arrayList.add(pair1);
+//            arrayList.add(pair2);
+//            arrayList.add(pair3);
+//            lnglatContainers.add(arrayList);
+//        }
+
 
         //fill string lists
-        for (ArrayList<android.util.Pair<String, String>> row : lnglatContainers) {
+        for (ArrayList<Pair<String, String>> row : lnglatContainers) {
             latContainers.add(row.get(1).second);
             lngContainers.add(row.get(2).second);
         }
+
+        myLocation = getLastKnownLocation(this, mLocationManager);
+
+        Intent intent = new Intent();
+        ArrayList<String> pos = new ArrayList<>();
+        pos.add(Double.toString(getClosest().latitude));
+        pos.add(Double.toString(getClosest().longitude));
+        intent.putExtra("pos", pos);
+        setResult(RESULT_OK, intent);
+
+        currentLat = Double.toString(myLocation.getLatitude());
+        currentLng = Double.toString(myLocation.getLongitude());
 
         //place markers
         for (int i = 0; i < lngContainers.size(); i++) {
@@ -105,13 +135,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private Location getLastKnownLocation() {
-        mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+    public static Location getLastKnownLocation(Context context, LocationManager mLocationManager) {
+        mLocationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
         List<String> providers = mLocationManager.getProviders(true);
         Location bestLocation = null;
         for (String provider : providers) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             }
             Location l = mLocationManager.getLastKnownLocation(provider);
             if (l == null) {
@@ -136,7 +165,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private LatLng getClosest(){
-        return new LatLng(51.4, 4.8);
+        return new LatLng(Double.parseDouble(latContainers.get(0)),Double.parseDouble(lngContainers.get(0)));
     }
 
     private String getDirectionsUrl(LatLng dest){

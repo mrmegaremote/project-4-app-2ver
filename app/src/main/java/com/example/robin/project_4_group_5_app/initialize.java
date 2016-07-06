@@ -1,6 +1,9 @@
 package com.example.robin.project_4_group_5_app;
 
 import android.graphics.Color;
+import android.location.Geocoder;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.Pair;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -24,6 +27,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Jeroen on 01-07-16.
@@ -254,5 +258,29 @@ public class initialize {
         graphCombi.animateY(700);
 
         graphCombi.invalidate();
+    }
+
+    public static String getCompleteAddressString(double LATITUDE, double LONGITUDE, MainActivity mainActivity) {
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(mainActivity, Locale.getDefault());
+        try {
+            List<android.location.Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null) {
+                android.location.Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.w("My Current address", "" + strReturnedAddress.toString());
+            } else {
+                Log.w("My Current address", "Error(1): failed to load address.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.w("My Current address", "Error(2): failed to load address.");
+        }
+        return strAdd;
     }
 }
