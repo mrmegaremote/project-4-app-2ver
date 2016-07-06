@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
         try
         {
-                fOut = openFileOutput("file.txt", MODE_PRIVATE);
+                fOut = openFileOutput("file.txt", MODE_APPEND);
                 Location temploc = MapsActivity.getLastKnownLocation(this, mLocationManager);
                 myLocation = new LatLng(temploc.getLatitude(), temploc.getLongitude());
 
