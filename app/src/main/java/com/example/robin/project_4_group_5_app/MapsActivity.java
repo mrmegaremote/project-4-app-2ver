@@ -82,34 +82,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.setMyLocationEnabled(true);
 
-//        //make jsonString for parsing
-//        String jsonString = "10&val=1" +
-//                "&lat=" + currentLat + "&lng=" + currentLng;
+        myLocation = getLastKnownLocation(this, mLocationManager);
+
+        currentLat = Double.toString(myLocation.getLatitude());
+        currentLng = Double.toString(myLocation.getLongitude());
 
         //make jsonString for parsing
         String jsonString = "10&val=1" +
-                "&lat=51.91738&lng=4.48392";
+                "&lat=" + currentLat + "&lng=" + currentLng;
 
         //get list of coordinates of bike container
         lnglatContainers = JSONAdapter.initializeJSON(jsonString);
-
-//        if (lnglatContainers.size()==0){
-//            String id  = "0";
-//            String lat = "51.4";
-//            String lng = "4.8";
-//            String dist = "0.9";
-//            Pair<String, String> pair0 = new Pair<>("id", id);
-//            Pair<String, String> pair1 = new Pair<>("Latitude", lat);
-//            Pair<String, String> pair2 = new Pair<>("Longitude", lat);
-//            Pair<String, String> pair3 = new Pair<>("dist", dist);
-//            ArrayList<Pair<String, String>> arrayList = new ArrayList<>();
-//            arrayList.add(pair0);
-//            arrayList.add(pair1);
-//            arrayList.add(pair2);
-//            arrayList.add(pair3);
-//            lnglatContainers.add(arrayList);
-//        }
-
 
         //fill string lists
         for (ArrayList<Pair<String, String>> row : lnglatContainers) {
@@ -117,17 +100,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             lngContainers.add(row.get(2).second);
         }
 
-        myLocation = getLastKnownLocation(this, mLocationManager);
-
-        Intent intent = new Intent();
-        ArrayList<String> pos = new ArrayList<>();
-        pos.add(Double.toString(getClosest().latitude));
-        pos.add(Double.toString(getClosest().longitude));
-        intent.putExtra("pos", pos);
-        setResult(RESULT_OK, intent);
-
-        currentLat = Double.toString(myLocation.getLatitude());
-        currentLng = Double.toString(myLocation.getLongitude());
 
         //place markers
         for (int i = 0; i < lngContainers.size(); i++) {
