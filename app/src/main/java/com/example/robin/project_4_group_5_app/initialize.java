@@ -270,8 +270,9 @@ public class initialize {
                 StringBuilder strReturnedAddress = new StringBuilder("");
 
                 for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i));
                 }
+                strReturnedAddress.append("\n");
                 strAdd = strReturnedAddress.toString();
                 Log.w("My Current address", "" + strReturnedAddress.toString());
             } else {
