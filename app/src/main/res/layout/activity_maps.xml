@@ -1,9 +1,45 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.robin.project_4_group_5_app.MapsActivity"
-    />
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="wrap_content"
+    android:layout_width="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="back"
+            android:layout_marginTop="0dp"
+            android:id="@+id/screen_1_back_button"
+            android:onClick="OnBackButton" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_marginTop="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get Route to closest container"
+            android:id="@+id/buttonFindContainer"
+            android:onClick="OnSearch"/>
+
+    </LinearLayout>
+
+    <!--Maps -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="380dp"
+            android:layout_height="520dp"
+            tools:context="com.example.robin.project_4_group_5_app.MapsActivity"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

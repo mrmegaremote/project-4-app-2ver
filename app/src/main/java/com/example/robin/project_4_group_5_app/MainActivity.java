@@ -48,7 +48,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String JSON_URL = "http://188.166.26.149/userstory1.php?querynum=";
     public FileOutputStream fOut;
     TextView textViewReader;
     FileInputStream fin;
@@ -117,22 +116,8 @@ public class MainActivity extends AppCompatActivity {
 
         //      MAPS        //
         setContentView(R.layout.activity_maps);
-        ArrayList<ArrayList<Pair<String, String>>> lnglatContainers = initializeJSON("9");
-
-        ArrayList<String> latContainers = new ArrayList<>();
-        ArrayList<String> lngContainers = new ArrayList<>();
-
-        for (ArrayList<Pair<String, String>> row:lnglatContainers) {
-            latContainers.add(row.get(0).second);
-            lngContainers.add(row.get(1).second);
-        }
-
-        Bundle extrasContainers = new Bundle();
-        extrasContainers.putStringArrayList("0", latContainers);
-        extrasContainers.putStringArrayList("1", lngContainers);
 
         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-        intent.putExtras(extrasContainers);
 
         startActivity(intent);
     }
@@ -191,12 +176,12 @@ public class MainActivity extends AppCompatActivity {
         initializeTabs();
 
         ArrayList<ArrayList<ArrayList<Pair<String,String>>>> listQueries = new ArrayList<>();
-        listQueries.add(initializeJSON("1"));
-        listQueries.add(initializeJSON("2"));
-        listQueries.add(initializeJSON("3&val='Overschie'"));
-        listQueries.add(initializeJSON("4&val='Overschie'"));
-        listQueries.add(initializeJSON("6"));
-        listQueries.add(initializeJSON("7"));
+        listQueries.add(JSONAdapter.initializeJSON("1"));
+        listQueries.add(JSONAdapter.initializeJSON("2"));
+        listQueries.add(JSONAdapter.initializeJSON("3&val='Overschie'"));
+        listQueries.add(JSONAdapter.initializeJSON("4&val='Overschie'"));
+        listQueries.add(JSONAdapter.initializeJSON("6"));
+        listQueries.add(JSONAdapter.initializeJSON("7"));
 
         initialize.Graphs(listQueries, graphContainers, graphStolenBikes, graphCombi, graphBrands, graphColors);
 
@@ -207,72 +192,10 @@ public class MainActivity extends AppCompatActivity {
 //        textViewDebug = (TextView) findViewById(R.id.textViewDebug);
     }
 
-    private ArrayList<ArrayList<Pair<String,String>>> initializeJSON(String userstoryQueryNumber) {
-        this.jsonString = getJSON(JSON_URL, userstoryQueryNumber);
-        return JsonUtil.extractJSON(this.jsonString);
-    }
-
-    private String getJSON(final String url, String userstoryQueryNumber) {
-        class GetJSON extends AsyncTask<String, Void, String>
-        {
-            String jsonString = "Test!";
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-
-            }
-
-            @Override
-            protected String doInBackground(String... params) {
-
-                String uri = params[0];
-
-                BufferedReader bufferedReader = null;
-
-                try {
-                    URL url = new URL(uri);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    StringBuilder sb = new StringBuilder();
-
-                    bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-                    String json;
-                    while ((json = bufferedReader.readLine()) != null) {
-                        sb.append(json + "\n");
-                    }
-
-                    return sb.toString().trim();
-
-                } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_LONG).show();
-                    return e.toString();
-                }
-
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-            }
-        }
-
-        GetJSON gj = new GetJSON();
-        String newurl = url.concat(userstoryQueryNumber);
-        gj.execute(newurl);
-        try {
-            gj.jsonString = (gj.get());
-//            textViewDebug.setText(gj.jsonString);
-
-        } catch (Exception e) {
-            System.exit(1337);
-        }
-        return gj.jsonString;
-    }
 
     private void initializeSpinner(Spinner spinner, BarChart graphCombi, final MainActivity mainActivity){
         ArrayList<String> spinnerArray = new ArrayList<>();
-        ArrayList<ArrayList<Pair<String,String>>> listSpinner = initializeJSON("5");
+        ArrayList<ArrayList<Pair<String,String>>> listSpinner = JSONAdapter.initializeJSON("5");
 
         for (ArrayList<Pair<String, String>> row:listSpinner) {
             spinnerArray.add(row.get(1).second);
@@ -288,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 TextView valView = (TextView) view;
                 CharSequence val = valView.getText();
 
-                initialize.Combi(mainActivity.graphCombi, mainActivity.initializeJSON("3&val='"+val+"'"), mainActivity.initializeJSON("4&val='"+val+"'"), mainActivity.textErrorMsg);
+                initialize.Combi(mainActivity.graphCombi, JSONAdapter.initializeJSON("3&val='"+val+"'"), JSONAdapter.initializeJSON("4&val='"+val+"'"), mainActivity.textErrorMsg);
             }
 
             @Override
