@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -103,6 +104,30 @@ public class MainActivity extends AppCompatActivity {
         tabSpec.setContent(R.id.tabColors);
         tabSpec.setIndicator("Color");
         tabhost.addTab(tabSpec);
+    }
+
+    public void thirdHomeButtonClick(View view){
+//        setContentView(R.layout.activity_calendar);
+//        Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
+//        startActivity(intent);
+        Location temploc = MapsActivity.getLastKnownLocation(this, mLocationManager);
+        myLocation = new LatLng(temploc.getLatitude(), temploc.getLongitude());
+
+        Double currentLat = myLocation.latitude;
+        Double currentLng = myLocation.longitude;
+
+        String str = initialize.getCompleteAddressString(currentLat,currentLng,this);
+        str.replace("\\n", " ");
+
+        Calendar cal = Calendar.getInstance();
+        Intent intent = new Intent(Intent.ACTION_EDIT);
+        intent.setType("vnd.android.cursor.item/event");
+        intent.putExtra("beginTime", cal.getTimeInMillis());
+        intent.putExtra("allDay", false);
+        intent.putExtra("endTime", cal.getTimeInMillis()+60*60*1000);
+        intent.putExtra("title", "Fiets ophalen bij "+str);
+        startActivity(intent);
+
     }
 
     public void HomeButtonClick(View view) throws FileNotFoundException {

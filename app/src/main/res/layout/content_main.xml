@@ -36,11 +36,22 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/stats"
+        android:text="Calendar"
         android:id="@+id/home_button_2"
+        android:onClick="thirdHomeButtonClick"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="49dp"
-        android:onClick="secondHomeButtonClick" />
+        android:layout_alignLeft="@+id/home_button_3"
+        android:layout_alignStart="@+id/home_button_3" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stats"
+        android:id="@+id/home_button_3"
+        android:onClick="secondHomeButtonClick"
+        android:layout_above="@+id/home_button_2"
+        android:layout_alignLeft="@+id/home_button_1"
+        android:layout_alignStart="@+id/home_button_1"
+        android:layout_marginBottom="17dp" />
 
 </RelativeLayout>
