@@ -44,6 +44,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
+
+
         for (int i = 0; i < lngContainers.size(); i++) {
             mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(latContainers.get(i)), Double.parseDouble(lngContainers.get(i)))).title("Bike Container"));
         }

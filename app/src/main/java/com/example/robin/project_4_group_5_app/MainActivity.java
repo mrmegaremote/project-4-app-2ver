@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         textViewReader = (TextView) findViewById(R.id.textViewReader);
 
         //      MAPS        //
-//        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_maps);
         ArrayList<ArrayList<Pair<String, String>>> lnglatContainers = initializeJSON("9");
 
         ArrayList<String> latContainers = new ArrayList<>();
@@ -296,11 +296,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    public void returnButtonTabbed(View view)
-    {
-        setContentView(R.layout.activity_main);
     }
 
     public void OnBackButton(View view) {
