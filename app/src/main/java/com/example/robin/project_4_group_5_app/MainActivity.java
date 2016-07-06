@@ -64,8 +64,10 @@ public class MainActivity extends AppCompatActivity {
 
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 setContentView(R.layout.notes);
+                textViewReader = (TextView) findViewById(R.id.textViewReader);
             }
         });
 
@@ -116,18 +118,27 @@ public class MainActivity extends AppCompatActivity {
 
     public void OnSaveClick(View view) throws IOException {
 
-        fOut = openFileOutput("file.txt", MODE_APPEND);
-        Location temploc = MapsActivity.getLastKnownLocation(this, mLocationManager);
-        myLocation = new LatLng(temploc.getLatitude(), temploc.getLongitude());
+        try
+        {
+                fOut = openFileOutput("file.txt", MODE_PRIVATE);
+                Location temploc = MapsActivity.getLastKnownLocation(this, mLocationManager);
+                myLocation = new LatLng(temploc.getLatitude(), temploc.getLongitude());
 
-        Double currentLat = myLocation.latitude;
-        Double currentLng = myLocation.longitude;
+                Double currentLat = myLocation.latitude;
+                Double currentLng = myLocation.longitude;
 
-        String str = initialize.getCompleteAddressString(currentLat,currentLng,this);
-        fOut.write(str.getBytes());
-        fOut.close();
-        Toast t = Toast.makeText(getApplicationContext(), "Location saved successfully.", Toast.LENGTH_SHORT);
-        t.show();
+                String str = initialize.getCompleteAddressString(currentLat,currentLng,this);
+
+                fOut.write(str.getBytes());
+                fOut.close();
+                Toast t = Toast.makeText(getApplicationContext(), "Location saved successfully.", Toast.LENGTH_SHORT);
+                t.show();
+        }
+        catch (Exception e)
+        {
+            Toast t = Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT);
+            t.show();
+        }
     }
 
     @Override
@@ -152,21 +163,30 @@ public class MainActivity extends AppCompatActivity {
                 textViewReader.setText(temp);
                 Toast t = Toast.makeText(MainActivity.this, "A location has been found", Toast.LENGTH_SHORT);
                 t.show();
+                fin.close();
             }
-        } catch (Exception e) {return;
+        } catch (Exception e)
+        {
+            Toast t = Toast.makeText(MainActivity.this, "reading failed for an unknown reason", Toast.LENGTH_SHORT);
+            t.show();
+            return;
         }
-
-        //string temp contains all the data of the file.
-        fin.close();
     }
 
-    public void OnDeleteClick(View view) throws IOException {
-        fOut = openFileOutput("file.txt", MODE_PRIVATE);
-        String str = "";
-        fOut.write(str.getBytes());
-        fOut.close();
-        Toast t = Toast.makeText(MainActivity.this, "The saved location has been deleted.", Toast.LENGTH_SHORT);
-        t.show();
+    public void OnDeleteClick(View view) throws IOException
+    {
+        try {
+            fOut = openFileOutput("file.txt", MODE_PRIVATE);
+            String str = "";
+            fOut.write(str.getBytes());
+            fOut.close();
+            Toast t = Toast.makeText(MainActivity.this, "The saved location has been deleted.", Toast.LENGTH_SHORT);
+            t.show();
+        }
+        catch (Exception e)
+        {
+            return;
+        }
     }
 
     public void secondHomeButtonClick(View view)
